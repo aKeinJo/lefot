@@ -1,0 +1,32 @@
+test-results
+node_modules
+_sample
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnp.*
+
+# Next.js & Linter Cache
+.eslintcache
+.swc/
+
+# Output
+.next
+.output
+.vercel
+.netlify
+.wrangler
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test

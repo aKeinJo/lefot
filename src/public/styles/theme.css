@@ -1,0 +1,27 @@
+:root {
+  /* gray */
+  --lefot-gray-100: oklch(0.96 0.001 90);
+  --lefot-gray-200: oklch(0.92 0.002 90);
+  --lefot-gray-300: oklch(0.88 0.003 90);
+  --lefot-gray-400: oklch(0.71 0.005 90);
+  --lefot-gray-500: oklch(0.55 0.009 90);
+  --lefot-gray-600: oklch(0.43 0.005 90);
+  --lefot-gray-700: oklch(0.31 0.002 90);
+  --lefot-gray-800: oklch(0.19 0.002 90);
+  --lefot-gray-900: oklch(0.12 0.001 90);
+
+  /* blue */
+  --lefot-blue-100: oklch(0.95 0.05 260);
+  --lefot-blue-200: oklch(0.9 0.11 260);
+  --lefot-blue-300: oklch(0.8 0.16 260);
+  --lefot-blue-400: oklch(0.7 0.2 260);
+  --lefot-blue-500: oklch(0.62 0.25 260);
+  --lefot-blue-600: oklch(0.55 0.25 260);
+  --lefot-blue-700: oklch(0.5 0.2 260);
+  --lefot-blue-800: oklch(0.42 0.15 260);
+  --lefot-blue-900: oklch(0.38 0.1 260);
+  /* --- */
+
+  /* --lefot-color-bg-slot: rgba(243, 22, 176, 0.25);
+  --lefot-color-border-slot: #f316b0; */
+}

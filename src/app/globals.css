@@ -1,0 +1,958 @@
+@import "tw-animate-css";
+@import "tailwindcss";
+
+@import "../public/styles/theme.css";
+
+@plugin 'tailwind-scrollbar';
+
+/* react-simple-code-editor hardcodes wordBreak: 'break-all' on the <pre> element as an inline style.
+   Override with !important to enable natural CJK line breaking. */
+.source-editor > pre {
+  word-break: normal !important; /* keep-all → normal */
+  overflow-wrap: break-word !important;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Edited by user */
+  --lefot-bg: var(--color-white);
+  --lefot-bg-hover: var(--lefot-gray-100);
+  --lefot-bg-pressed: var(--lefot-gray-200);
+  --lefot-bg-secondary: var(--lefot-gray-100);
+  --lefot-bg-tertiary: var(--lefot-gray-200);
+
+  --lefot-bg-inverse: var(--lefot-gray-900);
+
+  --lefot-bg-brand: var(--lefot-blue-500);
+  --lefot-bg-brand-hover: var(--lefot-blue-600);
+  --lefot-bg-brand-pressed: var(--lefot-blue-700);
+  --lefot-bg-brand-secondary: var(--lefot-blue-300);
+  --lefot-bg-brand-tertiary: var(--lefot-blue-900);
+
+  --lefot-bg-highlight: var(--color-purple-500);
+  --lefot-bg-highlight-hover: oklch(from var(--lefot-bg-highlight) l c h / 0.8);
+  --lefot-bg-highlight-pressed: oklch(
+    from var(--lefot-bg-highlight) l c h / 0.6
+  );
+  --lefot-bg-highlight-secondary: color.mix(
+    var(--lefot-bg-highlight),
+    var(--lefot-bg)
+  );
+  --lefot-bg-highlight-tertiary: color.mix(
+    var(--lefot-bg-highlight),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-danger: var(--color-red-500);
+  --lefot-bg-danger-hover: oklch(from var(--lefot-bg-danger) l c h / 0.8);
+  --lefot-bg-danger-pressed: oklch(from var(--lefot-bg-danger) l c h / 0.7);
+  --lefot-bg-danger-secondary: color.mix(var(--color-red-500), var(--lefot-bg));
+  --lefot-bg-danger-tertiary: color.mix(
+    var(--color-red-500),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-disabled: var(--lefot-gray-400);
+  --lefot-bg-disabled-secondary: var(--lefot-gray-300);
+
+  --lefot-bg-selected: #4a5878;
+  --lefot-bg-selected-hover: #536383;
+  --lefot-bg-selected-pressed: #4a5878;
+  --lefot-bg-selected-secondary: #394360;
+  --lefot-bg-selected-strong: #0c8ce9;
+  --lefot-bg-selected-tertiary: #394360;
+  --lefot-bg-onselected: #667799;
+  --lefot-bg-onselected-hover: #667799;
+  --lefot-bg-onselected-pressed: #667799;
+
+  --lefot-bg-success: var(--color-green-500);
+  --lefot-bg-success-hover: oklch(from var(--lefot-bg-success) l c h / 0.8);
+  --lefot-bg-success-pressed: oklch(from var(--lefot-bg-success) l c h / 0.6);
+  --lefot-bg-success-secondary: color.mix(
+    var(--color-green-500),
+    var(--lefot-bg)
+  );
+  --lefot-bg-success-tertiary: color.mix(
+    var(--color-green-500),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-warning: var(--color-amber-500);
+  --lefot-bg-warning-hover: oklch(from var(--lefot-bg-warning) l c h / 0.8);
+  --lefot-bg-warning-pressed: oklch(from var(--lefot-bg-warning) l c h / 0.6);
+  --lefot-bg-warning-secondary: color.mix(
+    var(--color-amber-500),
+    var(--lefot-bg)
+  );
+  --lefot-bg-warning-tertiary: color.mix(
+    var(--color-amber-500),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-border: var(--lefot-gray-500);
+  --lefot-border-strong: oklch(from var(--color-white) l c h / 0.8);
+
+  --lefot-border-onbrand: var(--lefot-blue-500);
+  --lefot-border-onbrand-strong: var(--color-white);
+
+  --lefot-border-brand: color.mix(
+    var(--lefot-border-onbrand),
+    var(--color-black)
+  );
+  --lefot-border-brand-strong: color.mix(
+    var(--lefot-border-onbrand),
+    var(--color-white)
+  );
+
+  --lefot-border-highlight: #604d75;
+  --lefot-border-highlight-hover: #8a38f5;
+  --lefot-border-highlight-strong: #d6b6fb;
+  --lefot-border-onhighlight: #7a2ed6;
+  --lefot-border-onhighlight-strong: #ffffff;
+
+  --lefot-border-success: color.mix(var(--color-green-500), var(--color-black));
+  --lefot-border-success-strong: color.mix(
+    var(--color-green-500),
+    var(--color-white)
+  );
+  --lefot-border-onsuccess: var(--color-green-600);
+  --lefot-border-onsuccess-strong: var(--color-white);
+
+  --lefot-border-warning: color.mix(var(--color-amber-500), var(--color-black));
+  --lefot-border-warning-strong: color.mix(
+    var(--color-amber-500),
+    var(--color-white)
+  );
+  --lefot-border-onwarning: var(--color-amber-600);
+  --lefot-border-onwarning-strong: var(--color-black);
+
+  --lefot-border-danger: color.mix(var(--color-red-500), var(--color-black));
+  --lefot-border-danger-strong: color.mix(
+    var(--color-red-500),
+    var(--color-white)
+  );
+  --lefot-border-ondanger: var(--color-red-600);
+  --lefot-border-ondanger-strong: var(--color-white);
+
+  --lefot-border-disabled: #444444;
+  --lefot-border-disabled-strong: #ffffff66;
+
+  --lefot-border-selected: #0c8ce9;
+  --lefot-border-selected-strong: #7cc4f8;
+  --lefot-border-onselected: #667799;
+  --lefot-border-onselected-strong: #ffffffe5;
+
+  --lefot-icon: var(--color-black);
+  --lefot-icon-hover: oklch(from var(--lefot-icon) l c h / 0.8);
+  --lefot-icon-pressed: oklch(from var(--lefot-icon) l c h / 0.6);
+  --lefot-icon-secondary: oklch(from var(--lefot-icon) l c h / 0.6);
+  --lefot-icon-secondary-hover: oklch(from var(--lefot-icon) l c h / 1);
+  --lefot-icon-tertiary: oklch(from var(--lefot-icon) l c h / 0.4);
+  --lefot-icon-tertiary-hover: oklch(from var(--lefot-icon) l c h / 1);
+
+  --lefot-icon-oninverse: var(--color-white);
+
+  --lefot-icon-brand: var(--lefot-blue-500);
+  --lefot-icon-brand-pressed: var(--lefot-blue-600);
+  --lefot-icon-brand-secondary: color.mix(
+    var(--color-blue-500),
+    var(--lefot-icon-oninverse)
+  );
+  --lefot-icon-brand-tertiary: color.mix(
+    var(--color-blue-500),
+    var(--lefot-icon-icon)
+  );
+  --lefot-icon-onbrand: var(--color-white);
+  --lefot-icon-onbrand-secondary: oklch(
+    from var(--lefot-icon-onbrand) l c h / 0.8
+  );
+  --lefot-icon-onbrand-tertiary: oklch(
+    from var(--lefot-icon-onbrand) l c h / 0.6
+  );
+
+  --lefot-icon-highlight: #d1a8ff;
+  --lefot-icon-highlight-pressed: #d6b6fb;
+  --lefot-icon-highlight-secondary: #7f699b;
+  --lefot-icon-highlight-tertiary: #7f699b;
+  --lefot-icon-onhighlight: #ffffff;
+  --lefot-icon-onhighlight-secondary: #ffffffcc;
+  --lefot-icon-onhighlight-tertiary: #ffffff66;
+
+  --lefot-icon-success: var(--color-green-500);
+  --lefot-icon-success-pressed: oklch(
+    from var(--lefot-icon-success) l c h / 0.8
+  );
+  --lefot-icon-success-secondary: oklch(
+    from var(--lefot-icon-success) l c h / 0.6
+  );
+  --lefot-icon-success-tertiary: oklch(
+    from var(--lefot-icon-success) l c h / 0.4
+  );
+  --lefot-icon-onsuccess: var(--color-white);
+  --lefot-icon-onsuccess-secondary: oklch(
+    from var(--lefot-icon-onsuccess) l c h / 0.8
+  );
+  --lefot-icon-onsuccess-tertiary: oklch(
+    from var(--lefot-icon-onsuccess) l c h / 0.6
+  );
+
+  --lefot-icon-warning: var(--color-amber-500);
+  --lefot-icon-warning-pressed: oklch(
+    from var(--lefot-icon-warning) l c h / 0.8
+  );
+  --lefot-icon-warning-secondary: oklch(
+    from var(--lefot-icon-warning) l c h / 0.6
+  );
+  --lefot-icon-warning-tertiary: oklch(
+    from var(--lefot-icon-warning) l c h / 0.4
+  );
+  --lefot-icon-onwarning: var(--color-white);
+  --lefot-icon-onwarning-secondary: oklch(
+    from var(--lefot-icon-onwarning) l c h / 0.8
+  );
+  --lefot-icon-onwarning-tertiary: oklch(
+    from var(--lefot-icon-onwarning) l c h / 0.6
+  );
+
+  --lefot-icon-danger: var(--color-red-500);
+  --lefot-icon-danger-hover: oklch(from var(--lefot-icon-danger) l c h / 0.8);
+  --lefot-icon-danger-pressed: oklch(from var(--lefot-icon-danger) l c h / 0.6);
+  --lefot-icon-danger-secondary: oklch(
+    from var(--lefot-icon-danger) l c h / 0.8
+  );
+  --lefot-icon-danger-secondary-hover: oklch(
+    from var(--lefot-icon-danger) l c h / 0.8
+  );
+  --lefot-icon-danger-tertiary: oklch(
+    from var(--lefot-icon-danger) l c h / 0.6
+  );
+  --lefot-icon-ondanger: var(--color-white);
+  --lefot-icon-ondanger-secondary: oklch(
+    from var(--lefot-icon-ondanger) l c h / 0.8
+  );
+  --lefot-icon-ondanger-tertiary: oklch(
+    from var(--lefot-icon-ondanger) l c h / 0.6
+  );
+
+  --lefot-icon-disabled: #ffffff66;
+  --lefot-icon-ondisabled: #060505;
+
+  --lefot-icon-selected: #7cc4f8;
+  --lefot-icon-selected-secondary: #7cc4f8;
+  --lefot-icon-selected-tertiary: #7cc4f8;
+  --lefot-icon-onselected: #ffffff;
+  --lefot-icon-onselected-secondary: #ffffffb2;
+  --lefot-icon-onselected-strong: #ffffff;
+  --lefot-icon-onselected-tertiary: #ffffff66;
+
+  --lefot-text: var(--color-black);
+  --lefot-text-hover: oklch(from var(--lefot-text) l c h / 0.8);
+  --lefot-text-secondary: oklch(from var(--lefot-text) l c h / 0.8);
+  --lefot-text-secondary-hover: oklch(from var(--lefot-text) l c h / 1);
+  --lefot-text-tertiary: oklch(from var(--lefot-text) l c h / 0.4);
+  --lefot-text-tertiary-hover: oklch(from var(--lefot-text) l c h / 1);
+
+  --lefot-text-oninverse: var(--color-white);
+
+  --lefot-text-brand: var(--color-blue-500);
+  --lefot-text-brand-secondary: oklch(from var(--lefot-text-brand) l c h / 0.8);
+  --lefot-text-brand-tertiary: oklch(from var(--lefot-text-brand) l c h / 0.6);
+  --lefot-text-onbrand: var(--color-white);
+  --lefot-text-onbrand-secondary: oklch(
+    from var(--lefot-text-onbrand) l c h / 0.8
+  );
+  --lefot-text-onbrand-tertiary: oklch(
+    from var(--lefot-text-onbrand) l c h / 0.6
+  );
+
+  --lefot-text-highlight: #d1a8ff;
+  --lefot-text-highlight-pressed: #d6b6fb;
+  --lefot-text-highlight-secondary: #7f699b;
+  --lefot-text-highlight-tertiary: #7f699b;
+  --lefot-text-onhighlight: #ffffff;
+  --lefot-text-onhighlight-secondary: #ffffffcc;
+  --lefot-text-onhighlight-tertiary: #ffffff66;
+
+  --lefot-text-success: #7cd797;
+  --lefot-text-success-secondary: #7cd797;
+  --lefot-text-success-tertiary: #7cd797;
+  --lefot-text-onsuccess: var(--color-white);
+  --lefot-text-onsuccess-secondary: oklch(
+    from var(--lefot-text-onsuccess) l c h / 0.8
+  );
+  --lefot-text-onsuccess-tertiary: oklch(
+    from var(--lefot-text-onsuccess) l c h / 0.6
+  );
+
+  --lefot-text-warning: #f7d15f;
+  --lefot-text-warning-secondary: #f7d15f;
+  --lefot-text-warning-tertiary: #f7d15f;
+  --lefot-text-onwarning: var(--color-black);
+  --lefot-text-onwarning-secondary: oklch(
+    from var(--lefot-text-onwarning) l c h / 0.8
+  );
+  --lefot-text-onwarning-tertiary: oklch(
+    from var(--lefot-text-onwarning) l c h / 0.6
+  );
+
+  --lefot-text-danger: #fca397;
+  --lefot-text-danger-secondary: #fca397;
+  --lefot-text-danger-tertiary: #fca397;
+  --lefot-text-ondanger: var(--color-white);
+  --lefot-text-ondanger-secondary: oklch(
+    from var(--lefot-text-ondanger) l c h / 0.8
+  );
+  --lefot-text-ondanger-tertiary: oklch(
+    from var(--lefot-text-ondanger) l c h / 0.6
+  );
+
+  --lefot-text-disabled: #ffffff66;
+  --lefot-text-ondisabled: #2c2c2c;
+
+  --lefot-text-selected: #7cc4f8;
+  --lefot-text-selected-secondary: #7cc4f8;
+  --lefot-text-selected-tertiary: #7cc4f8;
+  --lefot-text-onselected: #ffffffe5;
+  --lefot-text-onselected-secondary: #ffffffb2;
+  --lefot-text-onselected-strong: #ffffff;
+  --lefot-text-onselected-tertiary: #ffffff66;
+
+  /* shadcn default */
+  --background: var(--lefot-bg);
+
+  --foreground: var(--lefot-text);
+  --foreground-muted: var(--lefot-text-secondary);
+
+  --border: var(--lefot-border);
+  --border-focus: var(--lefot-border-brand);
+
+  --reverse: var(--lefot-bg-inverse);
+  --reverse-foreground: var(--lefot-text-oninverse);
+
+  --primary: var(--lefot-bg-brand);
+  --primary-foreground: var(--lefot-text-onbrand);
+
+  --secondary: var(--lefot-bg-secondary);
+  --secondary-foreground: var(--lefot-text);
+
+  --card: oklch(0.09 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.12 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.21 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.21 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --input: oklch(0.27 0 0);
+  --ring: oklch(0.546 0.245 262.881);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.09 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.21 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.27 0 0);
+  --sidebar-ring: oklch(0.546 0.245 262.881);
+}
+
+.dark {
+  /* Edited by user */
+  --lefot-bg: var(--lefot-gray-900);
+  --lefot-bg-hover: oklch(from var(--lefot-bg-inverse) l c h / 0.2);
+  --lefot-bg-pressed: oklch(from var(--lefot-bg-inverse) l c h / 0.3);
+  --lefot-bg-secondary: var(--lefot-gray-800);
+  --lefot-bg-tertiary: var(--lefot-gray-700);
+
+  --lefot-bg-inverse: var(--color-white);
+  --lefot-bg-inverse-hover: oklch(from var(--lefot-bg-inverse) l c h / 0.8);
+  --lefot-bg-inverse-pressed: oklch(from var(--lefot-bg-inverse) l c h / 0.6);
+
+  --lefot-bg-brand: var(--lefot-blue-600);
+  --lefot-bg-brand-hover: oklch(from var(--lefot-bg-brand) l c h / 0.8);
+  --lefot-bg-brand-pressed: oklch(from var(--lefot-bg-brand) l c h / 0.6);
+  --lefot-bg-brand-secondary: color.mix(var(--lefot-bg-brand), var(--lefot-bg));
+  --lefot-bg-brand-tertiary: color.mix(
+    var(--lefot-bg-brand),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-highlight: var(--color-amber-500);
+  --lefot-bg-highlight-hover: oklch(from var(--lefot-bg-highlight) l c h / 0.2);
+  --lefot-bg-highlight-pressed: oklch(
+    from var(--lefot-bg-highlight) l c h / 0.4
+  );
+  --lefot-bg-highlight-secondary: color.mix(
+    var(--lefot-bg-highlight),
+    var(--lefot-bg)
+  );
+  --lefot-bg-highlight-tertiary: color.mix(
+    var(--lefot-bg-highlight),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-success: var(--color-green-500);
+  --lefot-bg-success-hover: oklch(from var(--lefot-bg-success) l c h / 0.8);
+  --lefot-bg-success-pressed: oklch(from var(--lefot-bg-success) l c h / 0.6);
+  --lefot-bg-success-secondary: color.mix(
+    var(--lefot-bg-success),
+    var(--lefot-bg)
+  );
+  --lefot-bg-success-tertiary: color.mix(
+    var(--lefot-bg-success),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-warning: var(--color-amber-500);
+  --lefot-bg-warning-hover: oklch(from var(--lefot-bg-warning) l c h / 0.2);
+  --lefot-bg-warning-pressed: oklch(from var(--lefot-bg-warning) l c h / 0.4);
+  --lefot-bg-warning-secondary: color.mix(
+    var(--lefot-bg-warning),
+    var(--lefot-bg)
+  );
+  --lefot-bg-warning-tertiary: color.mix(
+    var(--lefot-bg-warning),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-danger: var(--color-red-600);
+  --lefot-bg-danger-hover: oklch(from var(--lefot-bg-danger) l c h / 0.4);
+  --lefot-bg-danger-pressed: oklch(from var(--lefot-bg-danger) l c h / 0.5);
+  --lefot-bg-danger-secondary: color.mix(
+    var(--lefot-bg-danger),
+    var(--lefot-bg)
+  );
+  --lefot-bg-danger-tertiary: color.mix(
+    var(--lefot-bg-danger),
+    var(--lefot-bg-inverse)
+  );
+
+  --lefot-bg-disabled: #757575;
+  --lefot-bg-disabled-secondary: #b3b3b3;
+
+  --lefot-bg-selected: #4a5878;
+  --lefot-bg-selected-hover: #536383;
+  --lefot-bg-selected-pressed: #4a5878;
+  --lefot-bg-selected-secondary: #394360;
+  --lefot-bg-selected-strong: #0c8ce9;
+  --lefot-bg-selected-tertiary: #394360;
+  --lefot-bg-onselected: #667799;
+  --lefot-bg-onselected-hover: #667799;
+  --lefot-bg-onselected-pressed: #667799;
+
+  --lefot-border: #444444;
+  --lefot-border-strong: #ffffffe5;
+
+  --lefot-border-onbrand: #0a6dc2;
+  --lefot-border-onbrand-strong: #ffffff;
+  --lefot-border-brand: #536383;
+  --lefot-border-brand-strong: #7cc4f8;
+
+  --lefot-border-highlight: #604d75;
+  --lefot-border-highlight-hover: #8a38f5;
+  --lefot-border-highlight-strong: #d6b6fb;
+  --lefot-border-onhighlight: #7a2ed6;
+  --lefot-border-onhighlight-strong: #ffffff;
+
+  --lefot-border-success: #517361;
+  --lefot-border-success-strong: #7cd797;
+  --lefot-border-onsuccess: #078348;
+  --lefot-border-onsuccess-strong: #ffffff;
+
+  --lefot-border-warning: #7a5800;
+  --lefot-border-warning-strong: #f7d15f;
+  --lefot-border-onwarning: #e4a711;
+  --lefot-border-onwarning-strong: #000000e5;
+
+  --lefot-border-danger: oklch(from var(--color-red-600) l c h / 0.2);
+  --lefot-border-danger-strong: #fca397;
+  --lefot-border-ondanger: #c4381c;
+  --lefot-border-ondanger-strong: #ffffff;
+
+  --lefot-border-disabled: #444444;
+  --lefot-border-disabled-strong: #ffffff66;
+
+  --lefot-border-selected: oklch(from var(--lefot-blue-500) l c h / 0.5);
+  --lefot-border-selected-strong: var(--lefot-blue-400);
+  --lefot-border-onselected: #667799;
+  --lefot-border-onselected-strong: #ffffffe5;
+
+  --lefot-icon: #ffffff;
+  --lefot-icon-hover: #ffffff;
+  --lefot-icon-pressed: #0a6dc2;
+  --lefot-icon-tertiary: #ffffff66;
+  --lefot-icon-tertiary-hover: #ffffff;
+  --lefot-icon-secondary: #ffffffb2;
+  --lefot-icon-secondary-hover: #ffffff;
+
+  --lefot-icon-selected: #7cc4f8;
+  --lefot-icon-selected-secondary: #7cc4f8;
+  --lefot-icon-selected-tertiary: #7cc4f8;
+
+  --lefot-icon-oninverse: #000000e5;
+
+  --lefot-icon-brand: #7cc4f8;
+  --lefot-icon-brand-pressed: #0c8ce9;
+  --lefot-icon-brand-secondary: #667799;
+  --lefot-icon-brand-tertiary: #4a5878;
+  --lefot-icon-onbrand: #ffffff;
+  --lefot-icon-onbrand-secondary: #ffffffcc;
+  --lefot-icon-onbrand-tertiary: #ffffff66;
+
+  --lefot-icon-highlight: #d1a8ff;
+  --lefot-icon-highlight-pressed: #d6b6fb;
+  --lefot-icon-highlight-secondary: #7f699b;
+  --lefot-icon-highlight-tertiary: #7f699b;
+  --lefot-icon-onhighlight: #ffffff;
+  --lefot-icon-onhighlight-secondary: #ffffffcc;
+  --lefot-icon-onhighlight-tertiary: #ffffff66;
+
+  --lefot-icon-success: #7cd797;
+  --lefot-icon-success-pressed: #a5e5b7;
+  --lefot-icon-success-secondary: #7cd797;
+  --lefot-icon-success-tertiary: #7cd797;
+  --lefot-icon-onsuccess: #ffffff;
+  --lefot-icon-onsuccess-secondary: #ffffffcc;
+  --lefot-icon-onsuccess-tertiary: #ffffff66;
+
+  --lefot-icon-warning: #f7d15f;
+  --lefot-icon-warning-pressed: #f7d15f;
+  --lefot-icon-warning-secondary: #f7d15f;
+  --lefot-icon-warning-tertiary: #f7d15f;
+  --lefot-icon-onwarning: #000000e5;
+  --lefot-icon-onwarning-secondary: #00000080;
+  --lefot-icon-onwarning-tertiary: #0000004d;
+
+  --lefot-icon-danger: oklch(from var(--color-red-100) l c h / 1);
+  --lefot-icon-danger-hover: oklch(from var(--color-red-200) l c h / 1);
+  --lefot-icon-danger-pressed: oklch(from var(--color-red-300) l c h / 1);
+  --lefot-icon-danger-secondary: oklch(from var(--color-red-600) l c h / 0.4);
+  --lefot-icon-danger-secondary-hover: oklch(
+    from var(--color-red-600) l c h / 0.5
+  );
+  --lefot-icon-danger-tertiary: oklch(from var(--color-red-600) l c h / 0.6);
+  --lefot-icon-ondanger: oklch(from var(--color-white) l c h / 1);
+  --lefot-icon-ondanger-secondary: oklch(from var(--color-white) l c h / 0.8);
+  --lefot-icon-ondanger-tertiary: oklch(from var(--color-white) l c h / 0.6);
+
+  --lefot-icon-disabled: #ffffff66;
+  --lefot-icon-ondisabled: #060505;
+
+  --lefot-icon-onselected: #ffffff;
+  --lefot-icon-onselected-secondary: #ffffffb2;
+  --lefot-icon-onselected-strong: #ffffff;
+  --lefot-icon-onselected-tertiary: #ffffff66;
+
+  --lefot-text: #ffffff;
+  --lefot-text-hover: #ffffff;
+  --lefot-text-secondary: #ffffffb2;
+  --lefot-text-secondary-hover: #ffffff;
+  --lefot-text-tertiary: #ffffff66;
+  --lefot-text-tertiary-hover: #ffffff;
+
+  --lefot-text-oninverse: #000000e5;
+
+  --lefot-text-brand: #7cc4f8;
+  --lefot-text-brand-secondary: #7cc4f8;
+  --lefot-text-brand-tertiary: #7cc4f8;
+  --lefot-text-onbrand: #ffffff;
+  --lefot-text-onbrand-secondary: #ffffffcc;
+  --lefot-text-onbrand-tertiary: #ffffff66;
+
+  --lefot-text-highlight: #d1a8ff;
+  --lefot-text-highlight-pressed: #d6b6fb;
+  --lefot-text-highlight-secondary: #7f699b;
+  --lefot-text-highlight-tertiary: #7f699b;
+  --lefot-text-onhighlight: #ffffff;
+  --lefot-text-onhighlight-secondary: #ffffffcc;
+  --lefot-text-onhighlight-tertiary: #ffffff66;
+
+  --lefot-text-success: #7cd797;
+  --lefot-text-success-secondary: #7cd797;
+  --lefot-text-success-tertiary: #7cd797;
+  --lefot-text-onsuccess: #ffffff;
+  --lefot-text-onsuccess-secondary: #ffffffcc;
+  --lefot-text-onsuccess-tertiary: #ffffff66;
+
+  --lefot-text-warning: #f7d15f;
+  --lefot-text-warning-secondary: #f7d15f;
+  --lefot-text-warning-tertiary: #f7d15f;
+  --lefot-text-onwarning: #000000e5;
+  --lefot-text-onwarning-secondary: #00000080;
+  --lefot-text-onwarning-tertiary: #0000004d;
+
+  --lefot-text-danger: #fca397;
+  --lefot-text-danger-secondary: #fca397;
+  --lefot-text-danger-tertiary: #fca397;
+  --lefot-text-ondanger: #ffffff;
+  --lefot-text-ondanger-secondary: #ffffffcc;
+  --lefot-text-ondanger-tertiary: #ffffff66;
+
+  --lefot-text-disabled: #ffffff66;
+  --lefot-text-ondisabled: #2c2c2c;
+
+  --lefot-text-selected: #7cc4f8;
+  --lefot-text-selected-secondary: #7cc4f8;
+  --lefot-text-selected-tertiary: #7cc4f8;
+  --lefot-text-onselected: #ffffffe5;
+  --lefot-text-onselected-secondary: #ffffffb2;
+  --lefot-text-onselected-strong: #ffffff;
+  --lefot-text-onselected-tertiary: #ffffff66;
+
+  /* shadcn default */
+  --background: var(--lefot-bg);
+
+  --foreground: var(--lefot-text);
+  --foreground-subtle: var(--lefot-text-secondary);
+
+  --border: var(--lefot-border);
+  --border-focus: var(--color-blue-800);
+
+  --surface: var(--lefot-bg);
+  --surface-subtle: var(--lefot-bg-secondary);
+  --surface-border: var(--lefot-border);
+  --surface-foreground: var(--lefot-text);
+
+  --reverse: var(--lefot-bg-inverse);
+  --reverse-foreground: var(--lefot-text-oninverse);
+
+  --primary: var(--lefot-bg-brand);
+  --primary-foreground: var(--lefot-text-onbrand);
+
+  --secondary: var(--color-blue-800);
+  --secondary-foreground: var(--color-surface-foreground);
+
+  --muted: oklch(0.21 0 0);
+  --muted-foreground: var(--lefot-text-secondary);
+  --card: oklch(0.09 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.12 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --accent: oklch(0.21 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: var(--color-red-600);
+  --destructive-foreground: oklch(0.985 0 0);
+  --input: oklch(0.27 0 0);
+  --ring: oklch(0.546 0.245 262.881);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.09 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.21 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.27 0 0);
+  --sidebar-ring: oklch(0.546 0.245 262.881);
+}
+
+@theme inline {
+  /* Edited by user */
+  --color-lefot-bg: var(--lefot-bg);
+  --color-lefot-bg-hover: var(--lefot-bg-hover);
+  --color-lefot-bg-pressed: var(--lefot-bg-pressed);
+  --color-lefot-bg-secondary: var(--lefot-bg-secondary);
+  --color-lefot-bg-tertiary: var(--lefot-bg-tertiary);
+
+  --color-lefot-bg-inverse: var(--lefot-bg-inverse);
+  --color-lefot-bg-inverse-hover: var(--lefot-bg-inverse-hover);
+  --color-lefot-bg-inverse-pressed: var(--lefot-bg-inverse-pressed);
+
+  --color-lefot-bg-brand: var(--lefot-bg-brand);
+  --color-lefot-bg-brand-hover: var(--lefot-bg-brand-hover);
+  --color-lefot-bg-brand-pressed: var(--lefot-bg-brand-pressed);
+  --color-lefot-bg-brand-secondary: var(--lefot-bg-brand-secondary);
+  --color-lefot-bg-brand-tertiary: var(--lefot-bg-brand-tertiary);
+
+  --color-lefot-bg-highlight: var(--lefot-bg-highlight);
+  --color-lefot-bg-highlight-hover: var(--lefot-bg-highlight-hover);
+  --color-lefot-bg-highlight-pressed: var(--lefot-bg-highlight-pressed);
+  --color-lefot-bg-highlight-secondary: var(--lefot-bg-highlight-secondary);
+  --color-lefot-bg-highlight-tertiary: var(--lefot-bg-highlight-tertiary);
+
+  --color-lefot-bg-danger: var(--lefot-bg-danger);
+  --color-lefot-bg-danger-hover: var(--lefot-bg-danger-hover);
+  --color-lefot-bg-danger-pressed: var(--lefot-bg-danger-pressed);
+  --color-lefot-bg-danger-secondary: var(--lefot-bg-danger-secondary);
+  --color-lefot-bg-danger-tertiary: var(--lefot-bg-danger-tertiary);
+
+  --color-lefot-bg-disabled: var(--lefot-bg-disabled);
+  --color-lefot-bg-disabled-secondary: var(--lefot-bg-disabled-secondary);
+
+  --color-lefot-bg-selected: var(--lefot-bg-selected);
+  --color-lefot-bg-selected-hover: var(--lefot-bg-selected-hover);
+  --color-lefot-bg-selected-pressed: var(--lefot-bg-selected-pressed);
+  --color-lefot-bg-selected-secondary: var(--lefot-bg-selected-secondary);
+  --color-lefot-bg-selected-strong: var(--lefot-bg-selected-strong);
+  --color-lefot-bg-selected-tertiary: var(--lefot-bg-selected-tertiary);
+  --color-lefot-bg-onselected: var(--lefot-bg-onselected);
+  --color-lefot-bg-onselected-hover: var(--lefot-bg-onselected-hover);
+  --color-lefot-bg-onselected-pressed: var(--lefot-bg-onselected-pressed);
+
+  --color-lefot-bg-success: var(--lefot-bg-success);
+  --color-lefot-bg-success-hover: var(--lefot-bg-success-hover);
+  --color-lefot-bg-success-pressed: var(--lefot-bg-success-pressed);
+  --color-lefot-bg-success-secondary: var(--lefot-bg-success-secondary);
+  --color-lefot-bg-success-tertiary: var(--lefot-bg-success-tertiary);
+
+  --color-lefot-bg-warning: var(--lefot-bg-warning);
+  --color-lefot-bg-warning-hover: var(--lefot-bg-warning-hover);
+  --color-lefot-bg-warning-pressed: var(--lefot-bg-warning-pressed);
+  --color-lefot-bg-warning-secondary: var(--lefot-bg-warning-secondary);
+  --color-lefot-bg-warning-tertiary: var(--lefot-bg-warning-tertiary);
+
+  --color-lefot-border: var(--lefot-border);
+  --color-lefot-border-strong: var(--lefot-border-strong);
+
+  --color-lefot-border-onbrand: var(--lefot-border-onbrand);
+  --color-lefot-border-onbrand-strong: var(--lefot-border-onbrand-strong);
+  --color-lefot-border-brand: var(--lefot-border-brand);
+  --color-lefot-border-brand-strong: var(--lefot-border-brand-strong);
+
+  --color-lefot-border-highlight: #604d75;
+  --color-lefot-border-highlight-hover: #8a38f5;
+  --color-lefot-border-highlight-strong: #d6b6fb;
+  --color-lefot-border-onhighlight: #7a2ed6;
+  --color-lefot-border-onhighlight-strong: #ffffff;
+
+  --color-lefot-border-success: var(--lefot-border-success);
+  --color-lefot-border-success-strong: var(--lefot-border-success-strong);
+  --color-lefot-border-onsuccess: var(--lefot-border-onsuccess);
+  --color-lefot-border-onsuccess-strong: var(--lefot-border-onsuccess-strong);
+
+  --color-lefot-border-warning: var(--lefot-border-warning);
+  --color-lefot-border-warning-strong: var(--lefot-border-warning-strong);
+  --color-lefot-border-onwarning: var(--lefot-border-onwarning);
+  --color-lefot-border-onwarning-strong: var(--lefot-border-onwarning-strong);
+
+  --color-lefot-border-danger: var(--lefot-border-danger);
+  --color-lefot-border-danger-strong: var(--lefot-border-danger-strong);
+  --color-lefot-border-ondanger: var(--lefot-border-ondanger);
+  --color-lefot-border-ondanger-strong: var(--lefot-border-ondanger-strong);
+
+  --color-lefot-border-disabled: var(--lefot-border-disabled);
+  --color-lefot-border-disabled-strong: var(--lefot-border-disabled-strong);
+
+  --color-lefot-border-selected: var(--lefot-border-selected);
+  --color-lefot-border-selected-strong: var(--lefot-border-selected-strong);
+  --color-lefot-border-onselected: var(--lefot-border-onselected);
+  --color-lefot-border-onselected-strong: var(--lefot-border-onselected-strong);
+
+  --color-lefot-icon: var(--lefot-icon);
+  --color-lefot-icon-hover: var(--lefot-icon-hover);
+  --color-lefot-icon-pressed: var(--lefot-icon-pressed);
+  --color-lefot-icon-tertiary: var(--lefot-icon-tertiary);
+  --color-lefot-icon-tertiary-hover: var(--lefot-icon-tertiary-hover);
+  --color-lefot-icon-secondary: var(--lefot-icon-secondary);
+  --color-lefot-icon-secondary-hover: var(--lefot-icon-secondary-hover);
+
+  --color-lefot-icon-selected: var(--lefot-icon-selected);
+  --color-lefot-icon-selected-secondary: var(--lefot-icon-selected-secondary);
+  --color-lefot-icon-selected-tertiary: var(--lefot-icon-selected-tertiary);
+
+  --color-lefot-icon-oninverse: var(--lefot-icon-oninverse);
+
+  --color-lefot-icon-brand: var(--lefot-icon-brand);
+  --color-lefot-icon-brand-pressed: var(--lefot-icon-brand-pressed);
+  --color-lefot-icon-brand-secondary: var(--lefot-icon-brand-secondary);
+  --color-lefot-icon-brand-tertiary: var(--lefot-icon-brand-tertiary);
+  --color-lefot-icon-onbrand: var(--lefot-icon-onbrand);
+  --color-lefot-icon-onbrand-secondary: var(--lefot-icon-onbrand-secondary);
+  --color-lefot-icon-onbrand-tertiary: var(--lefot-icon-onbrand-tertiary);
+
+  --color-lefot-icon-highlight: var(--lefot-icon-highlight);
+  --color-lefot-icon-highlight-pressed: var(--lefot-icon-highlight-pressed);
+  --color-lefot-icon-highlight-secondary: var(--lefot-icon-highlight-secondary);
+  --color-lefot-icon-highlight-tertiary: var(--lefot-icon-highlight-tertiary);
+  --color-lefot-icon-onhighlight: var(--lefot-icon-onhighlight);
+  --color-lefot-icon-onhighlight-secondary: var(
+    --lefot-icon-onhighlight-secondary
+  );
+  --color-lefot-icon-onhighlight-tertiary: var(
+    --lefot-icon-onhighlight-tertiary
+  );
+
+  --color-lefot-icon-success: var(--lefot-icon-success);
+  --color-lefot-icon-success-pressed: var(--lefot-icon-success-pressed);
+  --color-lefot-icon-success-secondary: var(--lefot-icon-success-secondary);
+  --color-lefot-icon-success-tertiary: var(--lefot-icon-success-tertiary);
+  --color-lefot-icon-onsuccess: var(--lefot-icon-onsuccess);
+  --color-lefot-icon-onsuccess-secondary: var(--lefot-icon-onsuccess-secondary);
+  --color-lefot-icon-onsuccess-tertiary: var(--lefot-icon-onsuccess-tertiary);
+
+  --color-lefot-icon-warning: var(--lefot-icon-warning);
+  --color-lefot-icon-warning-pressed: var(--lefot-icon-warning-pressed);
+  --color-lefot-icon-warning-secondary: var(--lefot-icon-warning-secondary);
+  --color-lefot-icon-warning-tertiary: var(--lefot-icon-warning-tertiary);
+  --color-lefot-icon-onwarning: var(--lefot-icon-onwarning);
+  --color-lefot-icon-onwarning-secondary: var(--lefot-icon-onwarning-secondary);
+  --color-lefot-icon-onwarning-tertiary: var(--lefot-icon-onwarning-tertiary);
+
+  --color-lefot-icon-danger: var(--lefot-icon-danger);
+  --color-lefot-icon-danger-hover: var(--lefot-icon-danger-hover);
+  --color-lefot-icon-danger-pressed: var(--lefot-icon-danger-pressed);
+  --color-lefot-icon-danger-secondary: var(--lefot-icon-danger-secondary);
+  --color-lefot-icon-danger-secondary-hover: var(
+    --lefot-icon-danger-secondary-hover
+  );
+  --color-lefot-icon-danger-tertiary: var(--lefot-icon-danger-tertiary);
+  --color-lefot-icon-ondanger: var(--lefot-icon-ondanger);
+  --color-lefot-icon-ondanger-secondary: var(--lefot-icon-ondanger-secondary);
+  --color-lefot-icon-ondanger-tertiary: var(--lefot-icon-ondanger-tertiary);
+
+  --color-lefot-icon-disabled: var(--lefot-icon-disabled);
+  --color-lefot-icon-ondisabled: var(--lefot-icon-ondisabled);
+
+  --color-lefot-icon-onselected: var(--lefot-icon-onselected);
+  --color-lefot-icon-onselected-secondary: var(
+    --lefot-icon-onselected-secondary
+  );
+  --color-lefot-icon-onselected-strong: var(--lefot-icon-onselected-strong);
+  --color-lefot-icon-onselected-tertiary: var(--lefot-icon-onselected-tertiary);
+
+  --color-lefot-text: var(--lefot-text);
+  --color-lefot-text-hover: var(--lefot-text-hover);
+  --color-lefot-text-secondary: var(--lefot-text-secondary);
+  --color-lefot-text-secondary-hover: var(--lefot-text-secondary-hover);
+  --color-lefot-text-tertiary: var(--lefot-text-tertiary);
+  --color-lefot-text-tertiary-hover: var(--lefot-text-tertiary-hover);
+
+  --color-lefot-text-oninverse: var(--lefot-text-oninverse);
+
+  --color-lefot-text-brand: var(--lefot-text-brand);
+  --color-lefot-text-brand-secondary: var(--lefot-text-brand-secondary);
+  --color-lefot-text-brand-tertiary: var(--lefot-text-brand-tertiary);
+  --color-lefot-text-onbrand: var(--lefot-text-onbrand);
+  --color-lefot-text-onbrand-secondary: var(--lefot-text-onbrand-secondary);
+  --color-lefot-text-onbrand-tertiary: var(--lefot-text-onbrand-tertiary);
+
+  --color-lefot-text-highlight: var(--lefot-text-highlight);
+  --color-lefot-text-highlight-pressed: var(--lefot-text-highlight-pressed);
+  --color-lefot-text-highlight-secondary: var(--lefot-text-highlight-secondary);
+  --color-lefot-text-highlight-tertiary: var(--lefot-text-highlight-tertiary);
+  --color-lefot-text-onhighlight: var(--lefot-text-onhighlight);
+  --color-lefot-text-onhighlight-secondary: var(
+    --lefot-text-onhighlight-secondary
+  );
+  --color-lefot-text-onhighlight-tertiary: var(
+    --lefot-text-onhighlight-tertiary
+  );
+
+  --color-lefot-text-success: var(--lefot-text-success);
+  --color-lefot-text-success-secondary: var(--lefot-text-success-secondary);
+  --color-lefot-text-success-tertiary: var(--lefot-text-success-tertiary);
+  --color-lefot-text-onsuccess: var(--lefot-text-onsuccess);
+  --color-lefot-text-onsuccess-secondary: var(--lefot-text-onsuccess-secondary);
+  --color-lefot-text-onsuccess-tertiary: var(--lefot-text-onsuccess-tertiary);
+
+  --color-lefot-text-warning: var(--lefot-text-warning);
+  --color-lefot-text-warning-secondary: var(--lefot-text-warning-secondary);
+  --color-lefot-text-warning-tertiary: var(--lefot-text-warning-tertiary);
+  --color-lefot-text-onwarning: var(--lefot-text-onwarning);
+  --color-lefot-text-onwarning-secondary: var(--lefot-text-onwarning-secondary);
+  --color-lefot-text-onwarning-tertiary: var(--lefot-text-onwarning-tertiary);
+
+  --color-lefot-text-danger: var(--lefot-text-danger);
+  --color-lefot-text-danger-secondary: var(--lefot-text-danger-secondary);
+  --color-lefot-text-danger-tertiary: var(--lefot-text-danger-tertiary);
+  --color-lefot-text-ondanger: var(--lefot-text-ondanger);
+  --color-lefot-text-ondanger-secondary: var(--lefot-text-ondanger-secondary);
+  --color-lefot-text-ondanger-tertiary: var(--lefot-text-ondanger-tertiary);
+
+  --color-lefot-text-disabled: var(--lefot-text-disabled);
+  --color-lefot-text-ondisabled: var(--lefot-text-ondisabled);
+
+  --color-lefot-text-selected: var(--lefot-text-selected);
+  --color-lefot-text-selected-secondary: var(--lefot-text-selected-secondary);
+  --color-lefot-text-selected-tertiary: var(--lefot-text-selected-tertiary);
+  --color-lefot-text-onselected: var(--lefot-text-onselected);
+  --color-lefot-text-onselected-secondary: var(
+    --lefot-text-onselected-secondary
+  );
+  --color-lefot-text-onselected-strong: var(--lefot-text-onselected-strong);
+  --color-lefot-text-onselected-tertiary: var(--lefot-text-onselected-tertiary);
+
+  /* --- */
+  --color-background: var(--background);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-foreground-muted: var(--foreground-muted);
+
+  --color-border: var(--border);
+  --color-border-focus: var(--border-focus);
+
+  --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-foreground: var(--surface-foreground);
+
+  --color-reverse: var(--reverse);
+  --color-reverse-subtle: var(--reverse-subtle);
+  --color-reverse-foreground: var(--reverse-foreground);
+
+  /* shadcn default */
+  --font-sans:
+    var(--font-pretendard), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "D2coding", "mono";
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+::-webkit-scrollbar {
+}
