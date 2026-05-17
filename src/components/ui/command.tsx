@@ -115,6 +115,7 @@ function CommandGroup({
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Group>) {
   return (
+    // 수정필요. ClassName 적용 안됨. 왜지?ㄹ
     <CommandPrimitive.Group
       data-slot="command-group"
       className={cn(

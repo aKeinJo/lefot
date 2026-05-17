@@ -35,11 +35,11 @@
   --lefot-bg-highlight-pressed: oklch(
     from var(--lefot-bg-highlight) l c h / 0.6
   );
-  --lefot-bg-highlight-secondary: color.mix(
+  --lefot-bg-highlight-secondary: color-mix(
     var(--lefot-bg-highlight),
     var(--lefot-bg)
   );
-  --lefot-bg-highlight-tertiary: color.mix(
+  --lefot-bg-highlight-tertiary: color-mix(
     var(--lefot-bg-highlight),
     var(--lefot-bg-inverse)
   );
@@ -47,8 +47,8 @@
   --lefot-bg-danger: var(--color-red-500);
   --lefot-bg-danger-hover: oklch(from var(--lefot-bg-danger) l c h / 0.8);
   --lefot-bg-danger-pressed: oklch(from var(--lefot-bg-danger) l c h / 0.7);
-  --lefot-bg-danger-secondary: color.mix(var(--color-red-500), var(--lefot-bg));
-  --lefot-bg-danger-tertiary: color.mix(
+  --lefot-bg-danger-secondary: color-mix(var(--color-red-500), var(--lefot-bg));
+  --lefot-bg-danger-tertiary: color-mix(
     var(--color-red-500),
     var(--lefot-bg-inverse)
   );
@@ -69,11 +69,11 @@
   --lefot-bg-success: var(--color-green-500);
   --lefot-bg-success-hover: oklch(from var(--lefot-bg-success) l c h / 0.8);
   --lefot-bg-success-pressed: oklch(from var(--lefot-bg-success) l c h / 0.6);
-  --lefot-bg-success-secondary: color.mix(
+  --lefot-bg-success-secondary: color-mix(
     var(--color-green-500),
     var(--lefot-bg)
   );
-  --lefot-bg-success-tertiary: color.mix(
+  --lefot-bg-success-tertiary: color-mix(
     var(--color-green-500),
     var(--lefot-bg-inverse)
   );
@@ -81,11 +81,11 @@
   --lefot-bg-warning: var(--color-amber-500);
   --lefot-bg-warning-hover: oklch(from var(--lefot-bg-warning) l c h / 0.8);
   --lefot-bg-warning-pressed: oklch(from var(--lefot-bg-warning) l c h / 0.6);
-  --lefot-bg-warning-secondary: color.mix(
+  --lefot-bg-warning-secondary: color-mix(
     var(--color-amber-500),
     var(--lefot-bg)
   );
-  --lefot-bg-warning-tertiary: color.mix(
+  --lefot-bg-warning-tertiary: color-mix(
     var(--color-amber-500),
     var(--lefot-bg-inverse)
   );
@@ -96,11 +96,11 @@
   --lefot-border-onbrand: var(--lefot-blue-500);
   --lefot-border-onbrand-strong: var(--color-white);
 
-  --lefot-border-brand: color.mix(
+  --lefot-border-brand: color-mix(
     var(--lefot-border-onbrand),
     var(--color-black)
   );
-  --lefot-border-brand-strong: color.mix(
+  --lefot-border-brand-strong: color-mix(
     var(--lefot-border-onbrand),
     var(--color-white)
   );
@@ -111,24 +111,24 @@
   --lefot-border-onhighlight: #7a2ed6;
   --lefot-border-onhighlight-strong: #ffffff;
 
-  --lefot-border-success: color.mix(var(--color-green-500), var(--color-black));
-  --lefot-border-success-strong: color.mix(
+  --lefot-border-success: color-mix(var(--color-green-500), var(--color-black));
+  --lefot-border-success-strong: color-mix(
     var(--color-green-500),
     var(--color-white)
   );
   --lefot-border-onsuccess: var(--color-green-600);
   --lefot-border-onsuccess-strong: var(--color-white);
 
-  --lefot-border-warning: color.mix(var(--color-amber-500), var(--color-black));
-  --lefot-border-warning-strong: color.mix(
+  --lefot-border-warning: color-mix(var(--color-amber-500), var(--color-black));
+  --lefot-border-warning-strong: color-mix(
     var(--color-amber-500),
     var(--color-white)
   );
   --lefot-border-onwarning: var(--color-amber-600);
   --lefot-border-onwarning-strong: var(--color-black);
 
-  --lefot-border-danger: color.mix(var(--color-red-500), var(--color-black));
-  --lefot-border-danger-strong: color.mix(
+  --lefot-border-danger: color-mix(var(--color-red-500), var(--color-black));
+  --lefot-border-danger-strong: color-mix(
     var(--color-red-500),
     var(--color-white)
   );
@@ -155,11 +155,11 @@
 
   --lefot-icon-brand: var(--lefot-blue-500);
   --lefot-icon-brand-pressed: var(--lefot-blue-600);
-  --lefot-icon-brand-secondary: color.mix(
+  --lefot-icon-brand-secondary: color-mix(
     var(--color-blue-500),
     var(--lefot-icon-oninverse)
   );
-  --lefot-icon-brand-tertiary: color.mix(
+  --lefot-icon-brand-tertiary: color-mix(
     var(--color-blue-500),
     var(--lefot-icon-icon)
   );
@@ -368,20 +368,20 @@
 .dark {
   /* Edited by user */
   --lefot-bg: var(--lefot-gray-900);
-  --lefot-bg-hover: oklch(from var(--lefot-bg-inverse) l c h / 0.2);
-  --lefot-bg-pressed: oklch(from var(--lefot-bg-inverse) l c h / 0.3);
+  --lefot-bg-hover: oklch(from var(--lefot-bg-inverse) l c h / 0.1);
+  --lefot-bg-pressed: oklch(from var(--lefot-bg-inverse) l c h / 0.2);
   --lefot-bg-secondary: var(--lefot-gray-800);
   --lefot-bg-tertiary: var(--lefot-gray-700);
 
   --lefot-bg-inverse: var(--color-white);
-  --lefot-bg-inverse-hover: oklch(from var(--lefot-bg-inverse) l c h / 0.8);
-  --lefot-bg-inverse-pressed: oklch(from var(--lefot-bg-inverse) l c h / 0.6);
+  --lefot-bg-inverse-hover: oklch(from var(--lefot-bg-inverse) l c h / 0.9);
+  --lefot-bg-inverse-pressed: oklch(from var(--lefot-bg-inverse) l c h / 0.8);
 
   --lefot-bg-brand: var(--lefot-blue-600);
-  --lefot-bg-brand-hover: oklch(from var(--lefot-bg-brand) l c h / 0.8);
-  --lefot-bg-brand-pressed: oklch(from var(--lefot-bg-brand) l c h / 0.6);
-  --lefot-bg-brand-secondary: color.mix(var(--lefot-bg-brand), var(--lefot-bg));
-  --lefot-bg-brand-tertiary: color.mix(
+  --lefot-bg-brand-hover: oklch(from var(--lefot-bg-brand) l c h / 0.9);
+  --lefot-bg-brand-pressed: oklch(from var(--lefot-bg-brand) l c h / 0.8);
+  --lefot-bg-brand-secondary: color-mix(var(--lefot-bg-brand), var(--lefot-bg));
+  --lefot-bg-brand-tertiary: color-mix(
     var(--lefot-bg-brand),
     var(--lefot-bg-inverse)
   );
@@ -391,11 +391,11 @@
   --lefot-bg-highlight-pressed: oklch(
     from var(--lefot-bg-highlight) l c h / 0.4
   );
-  --lefot-bg-highlight-secondary: color.mix(
+  --lefot-bg-highlight-secondary: color-mix(
     var(--lefot-bg-highlight),
     var(--lefot-bg)
   );
-  --lefot-bg-highlight-tertiary: color.mix(
+  --lefot-bg-highlight-tertiary: color-mix(
     var(--lefot-bg-highlight),
     var(--lefot-bg-inverse)
   );
@@ -403,11 +403,11 @@
   --lefot-bg-success: var(--color-green-500);
   --lefot-bg-success-hover: oklch(from var(--lefot-bg-success) l c h / 0.8);
   --lefot-bg-success-pressed: oklch(from var(--lefot-bg-success) l c h / 0.6);
-  --lefot-bg-success-secondary: color.mix(
+  --lefot-bg-success-secondary: color-mix(
     var(--lefot-bg-success),
     var(--lefot-bg)
   );
-  --lefot-bg-success-tertiary: color.mix(
+  --lefot-bg-success-tertiary: color-mix(
     var(--lefot-bg-success),
     var(--lefot-bg-inverse)
   );
@@ -415,23 +415,23 @@
   --lefot-bg-warning: var(--color-amber-500);
   --lefot-bg-warning-hover: oklch(from var(--lefot-bg-warning) l c h / 0.2);
   --lefot-bg-warning-pressed: oklch(from var(--lefot-bg-warning) l c h / 0.4);
-  --lefot-bg-warning-secondary: color.mix(
+  --lefot-bg-warning-secondary: color-mix(
     var(--lefot-bg-warning),
     var(--lefot-bg)
   );
-  --lefot-bg-warning-tertiary: color.mix(
+  --lefot-bg-warning-tertiary: color-mix(
     var(--lefot-bg-warning),
     var(--lefot-bg-inverse)
   );
 
-  --lefot-bg-danger: var(--color-red-600);
+  --lefot-bg-danger: oklch(from var(--color-red-500) l c h / 0.2);
   --lefot-bg-danger-hover: oklch(from var(--lefot-bg-danger) l c h / 0.4);
   --lefot-bg-danger-pressed: oklch(from var(--lefot-bg-danger) l c h / 0.5);
-  --lefot-bg-danger-secondary: color.mix(
+  --lefot-bg-danger-secondary: color-mix(
     var(--lefot-bg-danger),
     var(--lefot-bg)
   );
-  --lefot-bg-danger-tertiary: color.mix(
+  --lefot-bg-danger-tertiary: color-mix(
     var(--lefot-bg-danger),
     var(--lefot-bg-inverse)
   );
@@ -439,7 +439,8 @@
   --lefot-bg-disabled: #757575;
   --lefot-bg-disabled-secondary: #b3b3b3;
 
-  --lefot-bg-selected: #4a5878;
+  --lefot-bg-selected: var(--lefot-blue-900);
+  /* --lefot-bg-selected: oklch(from var(--lefot-blue-900) l c h / 1); */
   --lefot-bg-selected-hover: #536383;
   --lefot-bg-selected-pressed: #4a5878;
   --lefot-bg-selected-secondary: #394360;
@@ -532,8 +533,8 @@
   --lefot-icon-onwarning-secondary: #00000080;
   --lefot-icon-onwarning-tertiary: #0000004d;
 
-  --lefot-icon-danger: oklch(from var(--color-red-100) l c h / 1);
-  --lefot-icon-danger-hover: oklch(from var(--color-red-200) l c h / 1);
+  --lefot-icon-danger: oklch(from var(--color-red-300) l c h / 1);
+  --lefot-icon-danger-hover: oklch(from var(--color-red-300) l c h / 1);
   --lefot-icon-danger-pressed: oklch(from var(--color-red-300) l c h / 1);
   --lefot-icon-danger-secondary: oklch(from var(--color-red-600) l c h / 0.4);
   --lefot-icon-danger-secondary-hover: oklch(

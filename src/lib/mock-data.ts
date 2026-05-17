@@ -40,8 +40,8 @@ export const mockSettingValue: SettingValue =
   },
   { 
     role: "sub",
-    name: "Gemini 3.1 Flash Lite Preview",
-    code: "gemini-3.1-flash-lite-preview",
+    name: "Gemini 3.1 Flash Lite",
+    code: "gemini-3.1-flash-lite",
   },
   {
     role: "feedback",

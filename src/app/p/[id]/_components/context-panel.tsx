@@ -1,8 +1,3 @@
-// Todo
-// - Send 버튼 누르면 사용자의 chatbubble이 영역 최상단에 오도록 (왜 LLM 챗봇에서 이걸 하는지 알게됨. 현재는 위치 고정이라 답변이 바로 안보임.)
-// - Suggest 버튼 누르면 Disable되는데, 다른 버튼도 같이 Disable되거나 누른 버튼도 Disable되지 않아야 할듯. 아니면 누를 때 다른 버튼들은 Enabled되거나. 그리고 과거 대화가 됐을 때에는 어떻게 할지도 고민해봐야 할듯. (예: 새로운 메시지를 보내서 과거 대화가 됐는데, 계속 Enabled 상태로 남아있어야 할까?)
-// - Suggest 패널이 열려서 메시지가 하이라이팅되었을 때 다른 청크 호버 시 하이라이트가 사라지는데, Suggest 패널이 열려있는 동안에는 다른 청크 호버 시에도 하이라이팅이 유지되는 게 좋을듯. 그냥 패널 및 팝오버 열려있을 때 하이라이트는 호버 청크랑 구분해야 할듯.
-
 "use client";
 
 import * as React from "react";
@@ -17,17 +12,16 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { cn, getSeparator } from "@/lib/utils";
-import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
-import { ChatMessage, ProjectData } from "@/store/useProjectStore";
+import { ProjectData } from "@/store/useProjectStore";
 import { useProjectStore } from "@/store/useProjectStore";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useUIStore, PanelMode } from "@/store/useUIStore";
 import { InputGroup, InputGroupTextarea } from "@/components/ui/input-group";
 import { Toggle } from "@/components/ui/toggle";
-import { callChatModel, callRetranslateModel } from "@/lib/api/chat";
-import { languages } from "./language-combobox";
+import { useRetranslate } from "@/hooks/useRetranslate";
+import { useContextChat } from "@/hooks/useContextChat";
 
 // |||suggestion|reason|| 형식 파싱
 export interface EditOption {
@@ -109,233 +103,71 @@ export function ContextPanel({ data }: ContextPanelProps) {
   const { updateProject } = useProjectStore();
   const { settings } = useSettingsStore();
 
-  const [input, setInput] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [appliedSuggestions, setAppliedSuggestions] = React.useState<
-    Set<string>
-  >(new Set());
-  const scrollRef = React.useRef<HTMLDivElement>(null);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
-  // pendingContext (팝오버에서 전달된 context)를 input에 세팅
-  React.useEffect(() => {
-    if (pendingContext) {
-      setInput(pendingContext);
-      setPendingContext("");
-    }
-  }, [pendingContext, setPendingContext]);
-
-  // 새 청크 선택 시 input + applied 초기화
-  React.useEffect(() => {
-    setInput("");
-    setAppliedSuggestions(new Set());
-  }, [selectedChunkId]);
-
   const selectedSentence =
-    data.value.find((s) => s.id === selectedChunkId) ?? null;
-
-  React.useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [selectedSentence?.conversation?.length, isLoading]);
-
-  // 패널이 닫히면 선택 초기화
-  React.useEffect(() => {
-    if (!isPanelOpen) setInput("");
-  }, [isPanelOpen]);
+    data.pages[0]?.value?.find((s) => s.id === selectedChunkId) ?? null;
 
   const handleClose = () => {
     setIsPanelOpen(false);
   };
 
-  const handleSend = async () => {
-    if (!input.trim() || !selectedSentence || isLoading) return;
-    const userMessage = input.trim();
-    setInput("");
+  const {
+    input,
+    setInput,
+    isLoading,
+    appliedSuggestions,
+    scrollRef,
+    handleSend,
+    handleApply,
+    handleKeyDown,
+  } = useContextChat({
+    data,
+    selectedChunkId,
+    selectedSentence,
+    settings,
+    panelMode,
+    isPanelOpen,
+    pendingContext,
+    setPendingContext,
+    updateProject,
+  });
 
-    const chatMode =
-      panelMode === "suggest" || panelMode === "explain"
-        ? panelMode
-        : "explain";
-
-    // 낙관적 업데이트: 사용자 메시지 먼저 추가
-    const prevConversation = selectedSentence.conversation ?? [];
-    const userMsg: ChatMessage = { role: "user", content: userMessage };
-    const nextConversation = [...prevConversation, userMsg];
-
-    updateProject(data.id, {
-      value: data.value.map((s) =>
-        s.id === selectedChunkId ? { ...s, conversation: nextConversation } : s,
-      ),
-    });
-
-    setIsLoading(true);
-    try {
-      const responseText = await callChatModel({
-        settings,
-        mode: chatMode,
-        source: selectedSentence.source,
-        target: selectedSentence.target,
-        history: prevConversation,
-        userInput: userMessage,
-      });
-
-      const assistantMsg: ChatMessage = {
-        role: "assistant",
-        content: responseText,
-      };
-      updateProject(data.id, {
-        value: data.value.map((s) =>
-          s.id === selectedChunkId
-            ? { ...s, conversation: [...nextConversation, assistantMsg] }
-            : s,
-        ),
-      });
-    } catch (err: any) {
-      toast.error("Chat failed", { description: err.message });
-      // 롤백
-      updateProject(data.id, {
-        value: data.value.map((s) =>
-          s.id === selectedChunkId
-            ? { ...s, conversation: prevConversation }
-            : s,
-        ),
-      });
-      setInput(userMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleApply = (suggestion: string) => {
-    if (!selectedSentence) return;
-    updateProject(data.id, {
-      value: data.value.map((s) =>
-        s.id === selectedChunkId ? { ...s, target: suggestion } : s,
-      ),
-    });
-    setAppliedSuggestions((prev) => new Set(prev).add(suggestion));
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
-  // mode가 retranslate일 땐 chat 모드 기본값 explain으로
   const chatMode: "explain" | "suggest" =
     panelMode === "suggest" ? "suggest" : "explain";
 
-  // --- Retranslate / Direct Edit 로컬 상태 ---
-  type EditMode = "retranslate" | "direct";
-  const [editMode, setEditMode] = React.useState<EditMode>("retranslate");
-  const [retransSource, setRetransSource] = React.useState("");
-  const [retransResult, setRetransResult] = React.useState("");
-  const [isRetranslating, setIsRetranslating] = React.useState(false);
-  const [userNote, setUserNote] = React.useState("");
-  const [isAdvancedOpen, setIsAdvancedOpen] = React.useState(false);
-  const [directSource, setDirectSource] = React.useState("");
-  const [directTarget, setDirectTarget] = React.useState("");
+  const {
+    editMode,
+    setEditMode,
+    retransSource,
+    setRetransSource,
+    retransResult,
+    isRetranslating,
+    userNote,
+    setUserNote,
+    isAdvancedOpen,
+    setIsAdvancedOpen,
+    directSource,
+    setDirectSource,
+    directTarget,
+    setDirectTarget,
+    handleRetranslate,
+    handleApplyRetranslate,
+    handleApplyDirect,
+  } = useRetranslate({
+    data,
+    selectedChunkId,
+    selectedSentence,
+    settings,
+    updateProject,
+  });
 
-  // panelMode 변경 시 retranslate 상태 초기화
+  // panelMode가 retranslate로 바뀌면 editMode 리셋
   React.useEffect(() => {
     if (panelMode === "retranslate") {
       setEditMode("retranslate");
-      setRetransResult("");
-      setUserNote("");
-      setIsAdvancedOpen(false);
     }
-  }, [panelMode, selectedChunkId]);
-
-  // 청크 변경 시 retranslate 소스·결과 초기화
-  React.useEffect(() => {
-    if (selectedSentence) {
-      setRetransSource(selectedSentence.source);
-      setDirectSource(selectedSentence.source);
-      setDirectTarget(selectedSentence.target);
-      setRetransResult("");
-    }
-  }, [selectedChunkId, selectedSentence?.source, selectedSentence?.target]);
-
-  // applyEdit: value + sourceText 재구성 후 updateProject
-  const applyEdit = React.useCallback(
-    (newSource: string, newTarget: string) => {
-      if (!selectedSentence) return;
-      const lang = data.translationStats?.usedLanguage ?? data.targetLanguage;
-      const sep = getSeparator(lang);
-      const newValue = data.value.map((s) =>
-        s.id === selectedChunkId
-          ? { ...s, source: newSource.trimEnd(), target: newTarget.trimEnd() }
-          : s,
-      );
-      const newSourceText = newValue
-        .map((s, idx) => {
-          let suffix = sep;
-          if (s.lineBreaks === 1) suffix = "\n";
-          if (s.lineBreaks === 2) suffix = "\n\n";
-          if (idx === newValue.length - 1 && !s.lineBreaks) suffix = "";
-          return s.source + suffix;
-        })
-        .join("");
-      updateProject(data.id, {
-        value: newValue,
-        sourceText: newSourceText,
-        isSynced: true,
-      });
-    },
-    [data, selectedChunkId, selectedSentence, updateProject],
-  );
-
-  const handleRetranslate = async () => {
-    if (!selectedSentence || isRetranslating) return;
-    setIsRetranslating(true);
-    setRetransResult("");
-
-    const sentenceIdx = data.value.findIndex((s) => s.id === selectedChunkId);
-    const contextBefore = data.value
-      .slice(Math.max(0, sentenceIdx - 2), sentenceIdx)
-      .map((s) => s.target);
-    const contextAfter = data.value
-      .slice(sentenceIdx + 1, sentenceIdx + 3)
-      .map((s) => s.target);
-
-    const usedLang = data.translationStats?.usedLanguage ?? data.targetLanguage;
-    const targetLanguageLabel =
-      languages.find((l) => l.value === usedLang)?.label ?? usedLang;
-
-    try {
-      await callRetranslateModel({
-        settings,
-        targetSentence: retransSource,
-        targetLanguageLabel,
-        contextBefore,
-        contextAfter,
-        userNote: userNote.trim() || undefined,
-        onChunk: (chunk) => {
-          if (chunk.type === "text") {
-            setRetransResult((prev) => prev + chunk.text);
-          }
-        },
-      });
-    } catch (err: any) {
-      toast.error("Retranslation failed", { description: err.message });
-    } finally {
-      setIsRetranslating(false);
-    }
-  };
-
-  const handleApplyRetranslate = () => {
-    if (!retransResult.trim()) return;
-    applyEdit(retransSource, retransResult.trim());
-    setRetransResult("");
-  };
-
-  const handleApplyDirect = () => {
-    applyEdit(directSource, directTarget);
-  };
+  }, [panelMode, selectedChunkId, setEditMode]);
 
   return (
     <div className="flex flex-col bg-lefot-bg border-lefot-border border-l w-80 h-full overflow-hidden">
@@ -670,14 +502,6 @@ export function ContextPanel({ data }: ContextPanelProps) {
                 label="Sub — out"
                 value={String(data.translationStats.subModelTokens.output)}
               />
-            </div>
-          )}
-          {data.rawTranslation && (
-            <div className="flex flex-col gap-2">
-              <p className="font-medium text-sm">Raw Translation</p>
-              <p className="text-lefot-text-secondary text-sm leading-relaxed whitespace-pre-wrap">
-                {data.rawTranslation}
-              </p>
             </div>
           )}
         </div>

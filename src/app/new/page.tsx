@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-import { Workspace } from "../p/[id]/_components/workspace";
+import { BilingualView } from "../p/[id]/_components/bilingual-view";
 import {
   LanguageCombobox,
   languages,
@@ -56,9 +56,14 @@ export default function NewProjectMain() {
       title: autoTitle,
       guideline,
       targetLanguage,
-      sourceText,
-      isSynced: true,
-      value: [],
+      pages: [
+        {
+          id: crypto.randomUUID().slice(0, 8),
+          sourceText,
+          isSynced: false,
+          value: [],
+        },
+      ],
       ...updates,
     });
 
@@ -148,16 +153,14 @@ export default function NewProjectMain() {
         </div>
       </header>
 
-      {/* 빈 데이터를 던져서 초기 Workspace 렌더링 */}
-      <Workspace
+      {/* 빈 데이터를 던져서 초기 bilingual-view 렌더링 */}
+      <BilingualView
         data={{
           id: "new",
           title: "",
           guideline: "",
           targetLanguage: "ja",
-          sourceText: "",
-          isSynced: true,
-          value: [],
+          pages: [{ id: "new-p", sourceText: "", isSynced: true, value: [] }],
           updatedAt: Date.now(),
         }}
         onSourceChange={setSourceText}

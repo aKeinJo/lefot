@@ -150,7 +150,7 @@ export function AppSidebar({}: AppSidebarProps) {
                           project.targetLanguage}
                       </span>
                       |
-                      <span className="truncate">
+                      <span className="line-clamp-1">
                         {project.translationStats?.usedMainModel ?? "—"}
                       </span>
                     </div>
@@ -165,44 +165,31 @@ export function AppSidebar({}: AppSidebarProps) {
       {/* Bottom Footer */}
       <div className="flex items-center gap-2 p-2 border-border border-t">
         {isCollapsed ? (
-          <Link href="/settings" className="mx-auto">
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn(pathname === "/settings" && "bg-accent")}
-            >
-              <SettingsIcon className="w-4 h-4" />
-            </Button>
-          </Link>
+          <></>
         ) : (
-          <>
-            <div className="flex flex-1 items-center gap-2 px-2 overflow-hidden">
-              {isSettingsHydrated && !isProviderConfigured && (
-                <Link
-                  href="/settings"
-                  className="flex items-center gap-2 text-yellow-600 hover:text-yellow-700 truncate transition-colors"
-                >
-                  <AlertTriangleIcon className="w-4 h-4 shrink-0" />
-                  <span className="font-medium text-xs truncate">
-                    API Key Required
-                  </span>
-                </Link>
-              )}
-            </div>
-            <Link href="/settings">
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  "shrink-0",
-                  pathname === "/settings" && "bg-accent",
-                )}
+          <div className="flex flex-1 items-center gap-2 px-2 overflow-hidden">
+            {isSettingsHydrated && !isProviderConfigured && (
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 text-yellow-600 hover:text-yellow-700 truncate transition-colors"
               >
-                <SettingsIcon className="w-4 h-4" />
-              </Button>
-            </Link>
-          </>
+                <AlertTriangleIcon className="w-4 h-4 shrink-0" />
+                <span className="font-medium text-xs truncate">
+                  API Key Required
+                </span>
+              </Link>
+            )}
+          </div>
         )}
+        <Link href="/settings">
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(isCollapsed ? "shrink-0" : "")}
+          >
+            <SettingsIcon className="w-4 h-4" />
+          </Button>
+        </Link>
       </div>
     </aside>
   );

@@ -230,23 +230,6 @@ export function SettingsMain() {
     toast.info("Changes canceled.");
   };
 
-  // 입력 핸들러: Prompts 변경
-  const handlePromptChange = (
-    key: keyof SettingValue["prompts"],
-    value: string,
-  ) => {
-    setCurrentSettings((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        prompts: {
-          ...prev.prompts,
-          [key]: value,
-        },
-      };
-    });
-  };
-
   const handleResetModels = () => {
     resetModels();
     toast.info("Models and prompts reset to system defaults.");
@@ -282,12 +265,10 @@ export function SettingsMain() {
   const isModelChangedFromDefault =
     mainModel !== SYSTEM_DEFAULTS.mainModel ||
     subModel !== SYSTEM_DEFAULTS.subModel ||
-    useMainModelForFeedback !== SYSTEM_DEFAULTS.useMainForFeedback ||
-    currentSettings.prompts?.system !== SYSTEM_DEFAULTS.systemPrompt ||
-    currentSettings.prompts?.formatting !== SYSTEM_DEFAULTS.formattingPrompt;
+    useMainModelForFeedback !== SYSTEM_DEFAULTS.useMainForFeedback;
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col border-lefot-border border-l h-screen overflow-hidden">
       <div className="flex-1 pb-24 overflow-y-auto">
         <div className="mx-auto px-4 py-10 max-w-200">
           <header className="mb-10">

@@ -219,3 +219,46 @@ export async function translateWithModels(params: TranslateParams): Promise<Tran
     throw new Error(error?.message || "An error occurred during translation.")
   }
 }
+
+export interface CallFormattingParams {
+  settings: SettingValue
+  sourceText: string
+  rawTranslation: string
+  isStructureRetry?: boolean
+}
+
+export interface FormattingResult {
+  formattedData: Sentence[]
+  tokens: { input: number; output: number }
+}
+
+export async function callFormattingModel(params: CallFormattingParams): Promise<FormattingResult> {
+  const { settings, sourceText, rawTranslation, isStructureRetry } = params
+
+  const subModelCode = settings.model.find((m) => m.role === "sub")?.code
+  if (!subModelCode) throw new Error("Sub model is not configured.")
+
+  const subProvider = getProviderFromModelCode(subModelCode)
+  const subError = validateProviderConfig(subProvider, settings)
+  if (subError) throw new Error(subError)
+
+  const formattingPrompt = buildFormattingPrompt(sourceText, rawTranslation, isStructureRetry)
+  const result = await callModel(
+    subProvider,
+    subModelCode,
+    settings,
+    formattingPrompt,
+    true,
+    undefined,
+    settings.model.find((m) => m.role === "sub")?.temperature,
+  )
+
+  let formattedData: Sentence[]
+  try {
+    formattedData = parseFormattedJSON(result.text)
+  } catch {
+    throw new Error("Failed to parse the structured JSON from the model.")
+  }
+
+  return { formattedData, tokens: result.tokens }
+}

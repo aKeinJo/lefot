@@ -23,12 +23,9 @@ export const modelGroups = [
   {
     label: "Gemini",
     models: [
-      { value: "gemini-3-flash-preview", label: "Gemini 3 Flash Preview" },
-      {
-        value: "gemini-3.1-flash-lite-preview",
-        label: "Gemini 3.1 Flash Lite Preview",
-      },
       { value: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro Preview" },
+      { value: "gemini-3-flash-preview", label: "Gemini 3 Flash Preview" },
+      { value: "gemini-3.1-flash-lite", label: "Gemini 3.1 Flash Lite" },
     ],
   },
   {

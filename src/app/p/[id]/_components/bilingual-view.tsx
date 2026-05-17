@@ -21,22 +21,23 @@ export interface StreamingContent {
   textStartTime: number | null;
 }
 
-interface WorkspaceProps {
+interface BilingualViewProps {
   data: ProjectData;
   onSourceChange?: (newSource: string) => void;
   streamingContent?: StreamingContent | null;
 }
 
-export function Workspace({
+export function BilingualView({
   data,
   onSourceChange,
   streamingContent,
-}: WorkspaceProps) {
+}: BilingualViewProps) {
   // 에디터 입력 전용 로컬 상태
-  const [sourceText, setSourceText] = React.useState(data.sourceText || "");
+  const page = data.pages?.[0];
+  const [sourceText, setSourceText] = React.useState(page?.sourceText || "");
 
   // Right Panel에 렌더링할 데이터가 있는지 판별
-  const showResult = data.value && data.value.length > 0;
+  const showResult = page?.value && page.value.length > 0;
   const [hoveredId, setHoveredId] = React.useState<string | null>(null);
 
   const { selectedChunkId, isPanelOpen, popoverOpenChunkId } = useUIStore();
@@ -46,8 +47,8 @@ export function Workspace({
 
   // 부모로부터 데이터가 바뀌면 (예: 번역 완료 후) 로컬 상태 갱신
   React.useEffect(() => {
-    setSourceText(data.sourceText || "");
-  }, [data.sourceText]);
+    setSourceText(page?.sourceText || "");
+  }, [page?.sourceText]);
 
   // 언마운트 시점에 최종 텍스트 저장 (필요시)
   const sourceRef = React.useRef(sourceText);
@@ -67,23 +68,25 @@ export function Workspace({
   const highlightSource = (code: string) => {
     // 1. 동기화가 깨진 상태이거나
     // 2. 타이핑을 해서 초기값(스토어값)과 달라졌다면 하이라이팅 중단
-    if (!data.isSynced || code !== data.sourceText) {
+    if (!page?.isSynced || code !== page?.sourceText) {
       return escapeHtml(code);
     }
 
     // 번역 결과 데이터가 있을 때만 문장 단위 분할 렌더링
-    if (data.value && data.value.length > 0) {
-      return data.value
+    if (page?.value && page.value.length > 0) {
+      const lang = data.translationStats?.usedLanguage ?? data.targetLanguage;
+      const sep = getSeparator(lang);
+      return page.value
         .map((s, sIdx) => {
           const isHovered = activeHighlightId === s.id;
           const newLocal =
             "box-decoration-clone bg-lefot-bg-highlight-hover rounded-sm transition-colors";
           const className = isHovered ? newLocal : "transition-colors";
 
-          let suffix = " ";
+          let suffix = sep;
           if (s.lineBreaks === 1) suffix = "\n";
           if (s.lineBreaks === 2) suffix = "\n\n";
-          if (sIdx === data.value.length - 1 && !s.lineBreaks) suffix = ""; // 마지막은 공백 제거
+          if (sIdx === page.value.length - 1 && !s.lineBreaks) suffix = ""; // 마지막은 공백 제거
 
           return `<span key="${s.id || `s-${sIdx}`}" class="${className}">${escapeHtml(s.source)}</span>${escapeHtml(suffix)}`;
         })
@@ -103,13 +106,13 @@ export function Workspace({
             onValueChange={(code) => {
               setSourceText(code);
               // 동기화 상태가 깨진 것만 즉시 부모에게 알림
-              if (data.isSynced && code !== data.sourceText) {
+              if (page?.isSynced && code !== page?.sourceText) {
                 onSourceChange?.(code); // isSynced를 false로 만들기 위해 한 번 호출
               }
             }}
             onBlur={() => {
               // 에디터에서 포커스가 빠져나갈 때 최종 텍스트 저장
-              if (sourceText !== data.sourceText) {
+              if (sourceText !== page?.sourceText) {
                 onSourceChange?.(sourceText);
               }
             }}
@@ -144,7 +147,7 @@ export function Workspace({
               </div>
             ) : showResult ? (
               <div className="text-foreground text-lg leading-relaxed whitespace-pre-wrap">
-                {data.value.map((sentence, sIdx) => (
+                {page!.value.map((sentence, sIdx) => (
                   <React.Fragment key={sentence.id || `s-${sIdx}`}>
                     <AddonPopover sentence={sentence}>
                       <span
@@ -170,7 +173,7 @@ export function Workspace({
                       </>
                     )}
                     {(!sentence.lineBreaks || sentence.lineBreaks === 0) &&
-                      sIdx !== data.value.length - 1 &&
+                      sIdx !== page!.value.length - 1 &&
                       getSeparator(
                         data.translationStats?.usedLanguage ??
                           data.targetLanguage,

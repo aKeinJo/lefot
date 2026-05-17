@@ -31,7 +31,7 @@ export interface SettingValue {
 
 export const SYSTEM_DEFAULTS = {
   mainModel: "gemini-3-flash-preview",
-  subModel: "gemini-3.1-flash-lite-preview",
+  subModel: "gemini-3.1-flash-lite",
   useMainForFeedback: true,
   feedbackModel: "gemini-3-flash-preview",
 }
